@@ -26,8 +26,12 @@ public class Coin : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             Character.coinCount++;
+
             audioSource.Play();
+
             Debug.Log("playing");
+
+
 
         }
     }
