@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
     public float jumpForce;
 
     public int healthCount;
-    public static int coinCount;
+    public int coinCount;
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
 
     public GameObject coinText;
     public GameObject healthText;
+    public AudioClip[] AudioClipArr;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,8 @@ public class Character : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        audioSource.PlayOneShot(AudioClipArr[0], 0.1f);
     }
 
     // Update is called once per frame
@@ -38,15 +41,11 @@ public class Character : MonoBehaviour
         {
             hVelocity = -moveSpeed;
             transform.localScale = new Vector3(-1, 1, 1);
-
-            
         }
         else if(Input.GetKey(KeyCode.RightArrow))
         {
             hVelocity = moveSpeed;
             transform.localScale = new Vector3(1, 1, 1);
-
-            
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -74,9 +73,16 @@ public class Character : MonoBehaviour
 
             healthText.GetComponent<Text>().text = "Health: " + healthCount;
         }
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         if(collision.gameObject.tag == "Coin")
         {
+            audioSource.PlayOneShot(AudioClipArr[1]);
+
+            coinCount++;
+
             Destroy(collision.gameObject);
 
             coinText.GetComponent<Text>().text = "Coin: " + coinCount;
